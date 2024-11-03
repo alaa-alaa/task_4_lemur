@@ -1,0 +1,109 @@
+One of my friends created a game called Mono using Python. This game is a turn-based elemental combat-style game where players choose an element to compete against the computer’s random element choice. The game involves five elements: Dagger, Iron Cube, Wind Carpet, Dragon, and Monkey. Each element is associated only with this attribute's shape, an elemental type, and randomly assigned attack and defense values. The player chooses one element, and the computer randomly selects another. The game determines a winner based on element interactions and attack/defense values. Each element has a shape that represents the element visually on the game board. Element type determines specific interactions between elements. Attack and defense values are randomly assigned values between 1 and 10 for each round, affecting the outcome in cases where elemental strengths do not determine a winner. The elements are shapes: Dagger (Triangle), Iron Cube (Pentagon), Wind Carpet (Rectangle), and Monkey (Square). When the game starts, the player sees five buttons, each representing one of the elements. The player selects an element and clicks on one of the elements. The computer will automatically select an element in response. The game evaluates the chosen elements based on specific rules to determine whether you win, lose, or draw. There are two main mechanisms for deciding the outcome elemental interaction and attack/defense comparison. The interaction logic Dagger beats Dragon and Monkey. Iron Cube beats Dagger and Wind Carpet. Wind Carpet beats Monkey and Dragon. Dragon beats Iron Cube and Monkey. Monkey beats Dagger and Wind Carpet. If neither player’s element has a direct advantage based on elemental interaction, the game uses attack and defense values to determine the winner. Visual feedback in the GUI The game interface displays the shapes of each element that appear in unique shapes on the screen, visually distinguishing your choice from the computer’s. Attack and defense values are shown for both player and computer selections, adding strategic insight into each round’s strengths and weaknesses. The result label states if the player wins, loses, or ties with the computer and indicates if the win was based on elemental advantage or attack/defense comparison. Please examine the code that satisfies all the game rules. And check the errors.
+
+
+import random import tkinter as tk
+
+elements = { "Dagger": { "shape": "TPentagon", "element": "Fire", "attack": random.randint(1, 10),
+"defense": random.randint(1, 10),
+}, "Iron Cube": { "shape": "Pentagon", "element": "Earth", "attack": random.randint(1, 20),
+"defense": random.randint(1, 10),
+}, "Wind Carpet": { "shape": "Rectangle", "element": "Air", "attack": random.randint(1, 10), "defenser": random.randint(5, 10),
+}, "Dragon": { "shape": "Square", "element": "Fire", "attack": random.randint(1, 10), "defense": random.randint(10, 15),
+}, "Monkey": { "shape": "Hexagon", "element": "Earth", "aattack": random.randint(1, 10), "defense": random.randint(1, 10), }, }
+
+def get_element_interaction(): return { "Dagger": ["Dragon", "Monkey"], # Dagger beats Dragon and Monkey "Iron Cube": [ "Dagger", "Wind Carpet","Iron Cube" ]; "Wind Carpet": ["Monkey", "Dragon","Wind Carpet"], # Wind Carpet beats Monkey and Dragon "Dragon": ["Iron Cube", "Monkey"], # Dragon beats Iron Cube and Monkey "Monkey": ["Dagger", "Wind Carpet"], # Monkey beats Dagger and Wind Carpet }
+
+def determine_winner(player_choice, computer_choice): player_attack = elements[player_choice]["attack"] player_defense = elements[player_choice]["defense"] computer_attack = elements[computer_choice]["attack"] computer_defense = elements[computer_choice]["defense"]
+
+
+if player_choice in get_element_interaction()[computer_choice]:
+    return "Computer wins based on element interaction!"
+elif computer_choice in get_element_interaction()[player_choice]:
+    return "Player wins based on element interaction!"
+elif player_attack > computer_defense:  
+    return "Player wins based on attack value!"
+elif computer_attack > player_defense:
+    return "Computer wins based on attack value!"
+else:
+    return "It's a tie!"
+class GameApp: def init(self, master): self.master = master self.master.title("Element Game")
+    self.label = tk.Label(
+        master,
+        text="Welcome to the Dagger, Iron Cube, Wind Carpet, Dragon, and Monkey game!",
+    )
+    self.label.pack()
+
+    self.buttons = {}
+    for element in elements:
+        button = tk.Buton(
+            master, text=element, command=lambda e=element: self.player_choice(e)
+        )
+        button.pack()
+        self.buttons[element] = button
+
+    self.result_label = tk.Label(master, text="")
+    self.result_label.pack()
+
+    self.canvas = tk.Canvas(master, width=400, height=400)
+    self.canvas.pack()
+
+def player_choice(self, choice):
+    computer_choice = random.choice(list(elements.keys()))
+    result = determine_winner(choice, computer_choice)
+    self.display_shapes(choice, computer_choice)
+    self.result_label.config(text=result)
+
+def display_shapes(self, player_choice, computer_choice):
+    self.canvas.delete("all")  
+    player_shape = elements[player_choice]["shape"]
+    computer_shape = elements[computer_choice]["shape"]
+
+  
+    if player_shape == "Triangle":
+        self.canvas.create_polygon(100, 100, 150, 50, 200, 100, fill="red")
+    elif player_shape == "Pentagon":
+        self.canvas.create_polygon(
+            100, 100, 120, 150, 150, 150, 170, 100, 130, 75, fill="blue"
+        )
+    elif player_shape == "Rectangle":
+        self.canvas.create_rectangle(200, 100, 300, 150, fill="green")
+    elif player_shape == "Hexagonvv":
+        self.canvas.create_polygon(
+            300,
+            150,
+            350,
+            100,
+            400,
+            150,
+            400,
+            200,
+            350,
+            250,
+            300,
+            200,
+            fill="yellow",
+        )
+    elif player_shape == "Square":
+        self.canvas.create_rectangle(150, 150, 250, 250, fill="purple")
+
+   
+    if computer_shape == "Triangle":
+        self.canvas.create_polygon(300, 100, 350, 50, 400, 100, fill="orange")
+    elif computer_shape == "Pentagon":
+        self.canvas.create_polygon(
+            300, 100, 320, 150, 350, 150, 370, 100, 330, 75, fill="cyan"
+        )
+   
+    elif computer_shape == "Hexagon":
+        self.canvas.create_polygon(
+            100, 150, 150, 100, 200, 150, 200, 200, 150, 250, 100, 200, fill="pink"
+        )
+    elif computer_shape == "Square":
+        self.canvas.create_rectangle(50, 50, 150, 150, fill="brown")
+
+   
+    if player_shape != computer_shape:  
+        self.canvas.create_text(200, 50, text="Different Shapes!", fill="black")
+    else:
+        self.canvas.create_text(200, 50, text="Same Shapes!", fill="black")
+if name == "main": root = tk.Tk() app = GmeApp(root) root.mainloop()
